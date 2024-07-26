@@ -71,7 +71,7 @@ class AuthController extends Controller
     public function profile(Request $request)
     {
         return response()->json([
-            'data' => $request->user(),
+            'data' => User::with('assigned_task')->find($request->user()->id)
         ]);
     }
 }
