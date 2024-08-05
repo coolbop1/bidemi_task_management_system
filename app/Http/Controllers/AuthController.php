@@ -74,5 +74,12 @@ class AuthController extends Controller
             'data' => User::with('assigned_task')->find($request->user()->id)
         ]);
     }
+
+    public function unathenticated(Request $request)
+    {
+        $responseArr['message'] = "Unathenticated";
+        $responseArr['token'] = '';
+        return response()->json($responseArr, Response::HTTP_UNAUTHORIZED);
+    }
 }
 

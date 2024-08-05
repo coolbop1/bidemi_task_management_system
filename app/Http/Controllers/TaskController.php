@@ -54,10 +54,18 @@ class TaskController extends Controller
             $tag = str_replace('_',' ', $by_tag);
         }
         $search = $request->q;
+        $status = null;
+        if(isset($request->status) && in_array($request->status, ['todo', 'in-progress', 'done'])) {
+            $status = $request->status;
+        }
 
         $tasks = Tasks::when($tag, function ($q, $tag){
             return $q->where('tag', $tag);
-        })->when($search, function ($q, $search){
+        })
+        ->when($status, function ($q, $status){
+            return $q->where('status', $status);
+        })
+        ->when($search, function ($q, $search){
             return $q->where('tag', 'LIKE', '%'.$search.'%')->orWhere('title', 'LIKE', '%'.$search.'%');
         })->paginate(20);
 
